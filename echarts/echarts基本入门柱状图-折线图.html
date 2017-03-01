@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="js/echarts.js"></script>
+</head>
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: 'ECharts柱状图+折线图',
+                // 副标题
+                subtext: 'bar&line ',
+                // 标题的外链接
+                link: 'http://www.baidu.com',
+                target: '_blank',
+                padding: [5,10,5,10],//上、右、下、左
+            },
+            // 提示框组件
+            tooltip: {
+                // 触发类型：axis-坐标轴触发;item-元素触发
+                trigger:'axis'
+            },
+            // 组件
+            legend: {
+                data:['价格','销量']
+            },
+            // 右上角的工具栏
+            toolbox: {
+                show: true,
+                feature: {
+                    // 数据视图工具：readOnly是否不可编辑
+                    dataView: {readOnly: false},
+                    // 配置项还原
+                    restore: {},
+                    // 保存为图片
+                    saveAsImage: {}
+                }
+            },
+            // 用于区域缩放，从而能自由关注细节的数据信息，或者概览数据整体，或者去除离群点的影响
+            dataZoom: {
+                show: false,
+                start: 0,
+                end: 100
+            },
+            // X轴
+            xAxis: [
+                {
+                    // 坐标轴的类型：category-类目轴，必须通过 data 设置类目数据
+                    type: 'category',
+                    // 坐标轴两边留白策略，类目轴默认为 true，刻度只是作为分隔线，标签和数据点都会在两个刻度之间的带中间。
+                    boundaryGap: true,
+                    data: (function (){
+                        var now = new Date();
+                        var res = [];
+                        var len = 10;
+                        while (len--) {
+                            res.unshift(now.toLocaleTimeString().replace(/^\D*/,''));
+                            now = new Date(now - 2000);
+                        }
+                        return res;
+                    })()
+                },
+                {
+                    type: 'category',
+                    boundaryGap: true,
+                    data: (function (){
+                        var res = [];
+                        var len = 10;
+                        while (len--) {
+                            res.push(len + 1);
+                        }
+                        return res;
+                    })()
+                }
+            ],
+            // Y轴
+            yAxis: [
+                {
+                    // 坐标轴类型：value-适用于连续数据
+                    type: 'value',
+                    // 是否是脱离 0 值比例，只在数值轴中（type: 'value'）有效。
+                    scale: true,
+                    // 坐标轴名称
+                    name: '价格',
+                    // 坐标轴最大最小刻度值
+                    max: 30,
+                    min: 0,
+                    // 坐标轴两边的留白策略。两个值的数组，分别表示数据最小值和最大值的延伸范围，可以直接设置数值或者相对的百分比
+                    boundaryGap: [0.2, 0.2]
+                },
+                {
+                    type: 'value',
+                    scale: true,
+                    name: '销量',
+                    max: 1200,
+                    min: 0,
+                    boundaryGap: [0.2, 0.2]
+                }
+            ],
+            series: [
+                {
+                    name:'销量',
+                    type:'bar',
+                    // 使用的 x 轴的 index，在单个图表实例中存在多个 x 轴的时候有用。默认0
+                    xAxisIndex: 1,
+                    // 使用的 y 轴的 index，在单个图表实例中存在多个 y 轴的时候有用。默认0
+                    yAxisIndex: 1,
+                    data:(function (){
+                        var res = [];
+                        var len = 10;
+                        while (len--) {
+                            res.push(Math.round(Math.random() * 1000));
+                        }
+                        return res;
+                    })()
+                },
+                {
+                    name:'价格',
+                    type:'line',
+                    data:(function (){
+                        var res = [];
+                        var len = 0;
+                        while (len < 10) {
+                            res.push((Math.random()*10 + 5).toFixed(1) - 0);
+                            len++;
+                        }
+                        return res;
+                    })()
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</body>
+</html>
